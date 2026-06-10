@@ -1,0 +1,138 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id                   Int           @id @default(autoincrement())
+  nome                 String
+  matricula            String        @unique
+  senha                String
+  email                String?
+  tipoUsuario          String
+  usuarioChats         UsuarioChat[]
+  mensagens            Mensagem[]
+  chamadosSolicitados  Chamado[]     @relation("ChamadosSolicitados")
+  chamadosResponsaveis Chamado[]     @relation("ChamadosResponsaveis")
+}
+
+model Chat {
+  id           Int           @id @default(autoincrement())
+  chamadoId    Int // Relação de chave estrangeira
+  criadoEm     DateTime      @default(now())
+  atualizadoEm DateTime      @updatedAt
+  status       String
+  mensagens    Mensagem[]
+  usuarios     UsuarioChat[]
+  chamado      Chamado       @relation(fields: [chamadoId], references: [id]) // Relacionamento com Chamado
+}
+
+model UsuarioChat {
+  id        Int     @id @default(autoincrement())
+  usuarioId Int
+  chatId    Int
+  usuario   Usuario @relation(fields: [usuarioId], references: [id])
+  chat      Chat    @relation(fields: [chatId], references: [id])
+}
+
+model Chamado {
+  id                   Int             @id @default(autoincrement())
+  solicitanteId        Int
+  responsavelId        Int?
+  equipamentoId        Int?
+  tipoSolicitacaoId    Int
+  localId              Int
+  chamadoPaiId         Int?
+  descricao            String
+  dataSolicitacao      DateTime        @default(now())
+  dataPrevistaAtual    DateTime?
+  dataPrevistaAnterior DateTime?
+  dataPrevistaOriginal DateTime?
+  prioridadeAtual      String
+  prioridadeAnterior   String?
+  prioridadeOriginal   String?
+  status               String
+  observacao           String?
+  assunto              String
+  imagem               Bytes?
+  comentarios          Comentario[]
+  alteracoes           Alteracao[]
+  solicitante          Usuario         @relation("ChamadosSolicitados", fields: [solicitanteId], references: [id])
+  responsavel          Usuario?        @relation("ChamadosResponsaveis", fields: [responsavelId], references: [id])
+  equipamento          Equipamento?    @relation(fields: [equipamentoId], references: [id])
+  tipoSolicitacao      TipoSolicitacao @relation(fields: [tipoSolicitacaoId], references: [id])
+  local                Local           @relation(fields: [localId], references: [id])
+  chamadoPai           Chamado?        @relation("ChamadoPai", fields: [chamadoPaiId], references: [id])
+  chamadosFilhos       Chamado[]       @relation("ChamadoPai")
+  chats                Chat[] // Relação de um para muitos     
+}
+
+model TipoSolicitacao {
+  id        Int       @id @default(autoincrement())
+  nome      String
+  descricao String?
+  st_ativo Boolean   @default(true)
+  dataHora Boolean   @default(false)
+  quantidadeCadeiras Boolean   @default(false)
+  cafe Boolean   @default(false)
+  chamados  Chamado[]
+}
+
+model Local {
+  id       Int       @id @default(autoincrement())
+  nome     String
+  st_ativo Boolean   @default(true)
+  chamados Chamado[]
+}
+
+model Equipamento {
+  id        Int       @id @default(autoincrement())
+  nome      String
+  descricao String?
+  st_ativo Boolean   @default(true)
+  chamados  Chamado[]
+}
+
+model Comentario {
+  id        Int     @id @default(autoincrement())
+  chamadoId Int
+  conteudo  String
+  chamado   Chamado @relation(fields: [chamadoId], references: [id])
+}
+
+model Alteracao {
+  id            Int      @id @default(autoincrement())
+  chamadoId     Int
+  justificativa String
+  prioridade    String
+  dataPrevista  DateTime
+  dataAlteracao DateTime @default(now())
+  chamado       Chamado  @relation(fields: [chamadoId], references: [id])
+}
+
+model Mensagem {
+  id           Int      @id @default(autoincrement())
+  chatId       Int
+  enviadaPorId Int
+  conteudo     String
+  criadoEm     DateTime @default(now())
+  chat         Chat     @relation(fields: [chatId], references: [id])
+  enviadaPor   Usuario  @relation(fields: [enviadaPorId], references: [id])
+}
+
+model AccessToken {
+  id        Int    @id @default(autoincrement())
+  token     String @unique
+  matricula String
+}

@@ -1,0 +1,28 @@
+[
+    {
+      "tipo": "evento",
+      "campos": [
+        { "nome": "nomeEvento", "label": "Nome do Evento", "tipo": "text" },
+        { "nome": "dataEvento", "label": "Data do Evento", "tipo": "date" },
+        {"nome": "localEvento", "label": "Local do Evento", "tipo": "select", "opcoes": ["Bairro", "Lab", "Abc", "Lab2"] }
+      ]
+    },
+    {
+      "tipo": "suporte",
+      "campos": [
+        { "nome": "descricaoProblema", "label": "Descrição do Problema", "tipo": "text" },
+        { "nome": "prioridade", "label": "Prioridade", "tipo": "select", "opcoes": ["Baixa", "Média", "Alta"] }
+      ]
+    },
+    {
+        "tipo": "teste",
+        "campos": [
+          { "nome": "descricaoProblema", "label": "Descrição do Problema", "tipo": "text" },
+          { "nome": "servirCafe", "label": "Servir Café", "tipo": "select", "opcoes": ["Sim", "Não"] },
+          { "nome": "testeCheck1", "label": "Teste Check 1", "tipo": "radio", "opcoes": ["Sim", "Não"] },
+          { "nome": "Checkbox", "label": "Teste Check 2", "tipo": "checkbox", "opcoes": ["Teste", "Teste"] },
+          { "nome": "prioridade", "label": "Prioridade", "tipo": "select", "opcoes": ["Baixa", "Média", "Alta"] }
+        ]
+      }
+  ]
+  

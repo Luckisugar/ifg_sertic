@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres_container
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: toor
+      POSTGRES_DB: abertura_chamados_bd
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  app:
+    build: .
+    container_name: nextjs_container
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - db
+    environment:
+      - NODE_ENV=production
+      - DATABASE_URL=postgresql://postgres:SUASENHA@db:5432/SEUBANCO
+      - EMAIL=joaonetopereira0@gmail.com
+      - FRONTEND_URL=http://localhost:80
+      - EMAIL_PASSWORD=vxro mnoi shko urqu
+      - JWT_SECRET=65379917035606c47e7c4c4b58debf15e12d9698c60bf04e95433702c215f236
+      - NEXT_PUBLIC_BASE_URL=http://localhost:80
+    entrypoint: ["/bin/sh", "-c", "npx prisma migrate deploy && npm run start -- -p 80"]
+
+volumes:
+  pgdata:

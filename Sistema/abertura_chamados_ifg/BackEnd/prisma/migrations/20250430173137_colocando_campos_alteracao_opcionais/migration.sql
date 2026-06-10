@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Alteracao" ALTER COLUMN "prioridade" DROP NOT NULL,
+ALTER COLUMN "dataPrevista" DROP NOT NULL,
+ALTER COLUMN "status" DROP NOT NULL;

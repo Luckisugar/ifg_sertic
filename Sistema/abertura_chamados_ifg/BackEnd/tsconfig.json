@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+      "target": "ES6",
+      "module": "commonjs",
+      "moduleResolution": "node",
+      "outDir": "./dist",
+      "rootDir": ".",
+      "esModuleInterop": true,
+      "strict": true
+    },
+    "include": ["src/**/*", "jest.setup.ts"],
+    "exclude": ["node_modules"]
+}
