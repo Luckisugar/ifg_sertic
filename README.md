@@ -1,3 +1,1 @@
-"# ifg_sertic" 
-"# ifg_sertic" 
-"# ifg_sertic" 
+tem uma pasta cheia de pdf explicando tudo. vai lá.
